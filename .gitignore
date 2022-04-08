@@ -1,0 +1,7 @@
+# Ignore specific R files
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
