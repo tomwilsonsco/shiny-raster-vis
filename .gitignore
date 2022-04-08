@@ -5,3 +5,5 @@
 .Ruserdata
 .Rproj.user/
 *.Rproj
+
+data/*
