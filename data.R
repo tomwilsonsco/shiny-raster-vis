@@ -4,12 +4,6 @@ library(ggspatial)
 library(ggplot2)
 library(sf)
 
-raster_file <- list.files("data", full.names = TRUE)[1]
-
-raster_use_rgb <- brick(raster_file)
-
-raster_use_gray <- raster(raster_file)
-
 
 generate_random_window <- function(input_raster, pixels_x = 1000, pixels_y = 500) {
   x_size <- ncol(input_raster) - pixels_x
