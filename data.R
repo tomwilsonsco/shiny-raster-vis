@@ -24,8 +24,8 @@ plot_rgb_raster <- function(input_raster, plot_extent, image_scale = 1500, red_c
     ) +
     coord_sf(
       datum = st_crs(input_raster),
-      xlim = c(plot_extent[1], plot_extent[2] - 10),
-      ylim = c(plot_extent[3], plot_extent[4] - 10)
+      xlim = c(plot_extent[1] + 10, plot_extent[2] - 10),
+      ylim = c(plot_extent[3] + 10, plot_extent[4] - 10)
     ) +
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_continuous(expand = c(0, 0)) +
@@ -44,11 +44,11 @@ plot_grayscale_raster <- function(input_raster, plot_extent, image_scale = 1500,
   cropped_raster <- crop(input_raster, plot_extent)
   ggplot() +
     ggR(cropped_raster, layer = gray_channel, ggLayer = TRUE, geom_raster = TRUE) +
-    scale_fill_gradient(low="black", high="white", limits=c(0, image_scale), na.value = "white") +
+    scale_fill_gradient(low = "black", high = "white", limits = c(0, image_scale), na.value = "white") +
     coord_sf(
       datum = st_crs(cropped_raster),
-      xlim = c(plot_extent[1], plot_extent[2] - 10),
-      ylim = c(plot_extent[3], plot_extent[4] - 10)
+      xlim = c(plot_extent[1] + 10, plot_extent[2] - 10),
+      ylim = c(plot_extent[3] + 10, plot_extent[4] - 10)
     ) +
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_continuous(expand = c(0, 0)) +
