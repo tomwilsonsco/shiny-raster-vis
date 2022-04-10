@@ -41,6 +41,7 @@ plot_rgb_raster <- function(input_raster, plot_extent, image_scale = 1500, red_c
 }
 
 plot_grayscale_raster <- function(input_raster, plot_extent, image_scale = 1500, gray_channel = 1) {
+  gray_raster <- raster(input_raster, layer = gray_channel)
   cropped_raster <- crop(input_raster, plot_extent)
   ggplot() +
     ggR(cropped_raster, layer = gray_channel, ggLayer = TRUE, geom_raster = TRUE) +
