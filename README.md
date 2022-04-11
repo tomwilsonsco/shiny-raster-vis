@@ -5,5 +5,5 @@ Partly a way for me to get back into R coding and Shiny app dev, partly a useful
 
 This is a work in progress, improvements to be added periodically.  
 
-![image]("example.png")
+![example image](example.png)
 
