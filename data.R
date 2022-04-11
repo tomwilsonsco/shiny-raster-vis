@@ -15,12 +15,12 @@ generate_random_window <- function(input_raster, pixels_x = 1000, pixels_y = 500
   extent(min_x, min_x + pixels_x, min_y, min_y + pixels_y)
 }
 
-plot_rgb_raster <- function(input_raster, plot_extent, image_scale = 1500, red_channel = 3, green_channel = 2, blue_channel = 1) {
+plot_rgb_raster <- function(input_raster, plot_extent, image_scale = c(0, 1500), red_channel = 3, green_channel = 2, blue_channel = 1) {
   ggplot() +
     ggRGB(input_raster,
       r = red_channel, g = green_channel,
       b = blue_channel, ext = plot_extent,
-      limits = c(0, image_scale), scale = image_scale, ggLayer = TRUE
+      limits = image_scale, scale = image_scale[2], ggLayer = TRUE
     ) +
     coord_sf(
       datum = st_crs(input_raster),
@@ -40,12 +40,12 @@ plot_rgb_raster <- function(input_raster, plot_extent, image_scale = 1500, red_c
     )
 }
 
-plot_grayscale_raster <- function(input_raster, plot_extent, image_scale = 1500, gray_channel = 1) {
+plot_grayscale_raster <- function(input_raster, plot_extent, image_scale = c(0, 1500), gray_channel = 1) {
   gray_raster <- raster(input_raster, layer = gray_channel)
   cropped_raster <- crop(input_raster, plot_extent)
   ggplot() +
     ggR(cropped_raster, layer = gray_channel, ggLayer = TRUE, geom_raster = TRUE) +
-    scale_fill_gradient(low = "black", high = "white", limits = c(0, image_scale), na.value = "white") +
+    scale_fill_gradient(low = "black", high = "white", limits = image_scale, na.value = "white") +
     coord_sf(
       datum = st_crs(cropped_raster),
       xlim = c(plot_extent[1] + 10, plot_extent[2] - 10),
