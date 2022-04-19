@@ -34,34 +34,43 @@ ui <- fluidPage(
     ),
     fluidRow(
       column(
-        width = 6, style = "padding-left:30px;",
+        width = 12, style = "padding-left:30px;",
         sliderInput("pixel_range", "Pixel min max", min = 0, max = 3000, value = c(0, 1500), step = 50)
-      ),
-      column(width = 3, numericInput("pixels_x", "Window size X (pixels)", min = 100, max = x_dim, value = as.integer(x_dim/4))),
-      column(width = 3, numericInput("pixels_y", "Window size y (pixels)", min = 100, max = y_dim, value = as.integer(y_dim/4)))
+      )
     ),
-    fluidRow(column(
-      width = 12, style = "padding-left:30px;",
-      actionButton("new_ext", "New random extent")
-    )),
+    fluidRow(
+      column(width = 4, numericInput("pixels_x", "Plot size X (pixels)", min = 10, max = x_dim, value = 50)),
+      column(width = 4, numericInput("pixels_y", "Plot size y (pixels)", min = 10, max = y_dim, value = 25)),
+      column(width = 4, actionButton("new_size", "Update plot size"))
+    ),
     fluidRow(
       br(),
       plotOutput("ras_plot", inline = FALSE)
-    )
+    ),
+    fluidRow(column(
+      width = 12, style = "padding-left:30px;",
+      actionButton("new_loc", "New random image position")
+    ), )
   )
 )
 
 
 server <- function(input, output, session) {
-  extent_to_use <- eventReactive(input$new_ext, generate_random_window(raster_use_rgb, input$pixels_x, input$pixels_y), ignoreNULL = FALSE)
+  current_position <- eventReactive(input$new_loc,{random_xy(raster_use_rgb)}, ignoreNULL = FALSE)
+  current_dimensions <- eventReactive(input$new_size, {list(input$pixels_x, input$pixels_y)}, ignoreNULL= FALSE)#THIS DOES NOT WORK
+  extent_to_plot <- reactive(
+    {
+      window_from_xy(raster_use_rgb, current_position(), current_dimensions()[[1]], current_dimensions()[[2]])#OR THIS
+    },
+  )
   output$ras_plot <- renderPlot({
     if (input$plot_type == "rgb") {
-      plot_rgb_raster(raster_use_rgb, extent_to_use(),
+      plot_rgb_raster(raster_use_rgb, extent_to_plot(),
         image_scale = c(input$pixel_range[1], input$pixel_range[2]),
         red_channel = input$red_choice, green_channel = input$green_choice, blue_channel = input$blue_choice
       )
     } else {
-      plot_grayscale_raster(raster_use_rgb, extent_to_use(), image_scale = input$pixel_range, gray_channel = input$gray_choice)
+      plot_grayscale_raster(raster_use_rgb, extent_to_plot(), image_scale = input$pixel_range, gray_channel = input$gray_choice)
     }
   })
 }
