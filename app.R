@@ -1,4 +1,5 @@
 library(shiny)
+
 source("data.R")
 
 raster_file <- list.files("data", full.names = TRUE)[1]
